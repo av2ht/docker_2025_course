@@ -12,7 +12,7 @@ const pool = mysql.createPool({
    database: "northwind" // Make sure this DB exists
 });
 
-app.get("/users", (req, res) => {
+app.get("/ai_tools", (req, res) => {
   pool.query("SELECT * FROM ai_tools", (err, results) => {
     if (err) {
       return res.status(500).json({ error: err.message });
@@ -21,8 +21,7 @@ app.get("/users", (req, res) => {
     res.json(results);
   });
 });
- 
 
 app.listen(port, () => {
-  console.log(`API running at http://localhost`);
+  console.log(`API running at http://localhost:${port}`);
 });
