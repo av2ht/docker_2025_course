@@ -1,7 +1,22 @@
 FROM node:22-alpine
+
 WORKDIR /app
-COPY package.json .
+
+COPY package.json tsconfig.json .
 RUN npm install
+
 COPY . .
-EXPOSE 3000
+RUN npm run build
+
+# Stage 2: Run
+FROM node:22-alpine
+
+WORKDIR /app
+
+COPY --from=build /app/dist ./dist
+COPY package.json .
+
+RUN npm install --only=production
+
 CMD ["node", "index.js"]
+EXPOSE 3000
