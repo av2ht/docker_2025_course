@@ -13,35 +13,16 @@ const pool = mysql.createPool({
 });
 
 app.get("/users", (req, res) => {
-  pool.query("SELECT * FROM users", (err, results) => {
+  pool.query("SELECT * FROM ai_tools", (err, results) => {
     if (err) {
       return res.status(500).json({ error: err.message });
     }
+    console.log(results);
     res.json(results);
   });
 });
-
-app.get("/users", (req, res) => {
-  pool.query("SELECT * FROM users", (err, results) => {
-    if (err) {
-      return res.status(500).json({ error: err.message });
-    }
-    res.json(results);
-  });
-});
-
-app.get("/long-ms", async function (_, res) {
-  const result = await longCalc();
-  res.send(`long ${new Date().toISOString()}`);
-});
-
-async function longCalc() {
-  return new Promise((resolve, rej) => {
-    for (let index = 0; index < 9999999999; index++) {}
-    resolve(1);
-  });
-}
+ 
 
 app.listen(port, () => {
-  console.log(`API running at http://localhost:${port}`);
+  console.log(`API running at http://localhost`);
 });
