@@ -5,11 +5,11 @@ const app = express();
 const port = 3000;
 
 const pool = mysql.createPool({
-  host: process.env.DB_HOST,
-  port: process.env.DB_PORT,
-  user: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
-  database: process.env.DB_NAME,
+   host: "18.236.174.222", // Change to your DB host
+   //port: process.env.DB_PORT,
+   user: "root", // Change to your DB user
+   password: "root", // Change to your DB password
+   database: "northwind" // Make sure this DB exists
 });
 
 app.get("/users", (req, res) => {
