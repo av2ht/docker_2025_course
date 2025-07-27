@@ -7,7 +7,7 @@ services:
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: rootpass
-      MYSQL_DATABASE: appdb
+      MYSQL_DATABASE: ai_tools_catalog
       MYSQL_USER: appuser
       MYSQL_PASSWORD: apppass
     ports:
@@ -26,6 +26,7 @@ services:
       DB_PORT: 3306
       DB_USER: appuser
       DB_PASSWORD: apppass
-      DB_NAME: appdb
+      DB_NAME: ai_tools_catalog
     depends_on:
       - mysql
+      
