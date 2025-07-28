@@ -14,12 +14,15 @@ const db = mysql.createPool({
 });
 
 function verifyToken(req: any, res: any, next: any) {
-  const header = req.headers["authorization"];
-  const token = header?.split(" ")[1];
-  if (!token) return res.status(401).json({ error: "No token" });
+  const token = req.header("Authorization")?.split(" ")[1];
 
+  if (!token) {
+    return res.status(403).send("No token");
+  }
   jwt.verify(token, JWT_SECRET, (err, user) => {
-    if (err) return res.status(403).json({ error: "Invalid token" });
+    if (err) {
+      return res.status(403).send("Invalid token");
+    }
     req.user = user;
     next();
   });
@@ -27,7 +30,7 @@ function verifyToken(req: any, res: any, next: any) {
 
 app.use(express.json());
 
-app.use("/public", express.static("public")); // בלי path.join
+app.use("/public", express.static("public"));
 
 app.post("/login", (req, res) => {
   const { username, password } = req.body;
@@ -38,14 +41,15 @@ app.post("/login", (req, res) => {
   res.status(401).json({ error: "Invalid un/pw" });
 });
 
-app.get("/ai-tools", verifyToken, async (req, res) => {
+app.get("/ai-tools", verifyToken, (req, res) => {
   try {
-    const [rows] = await db.query(`
+    const [rows] = db.query(`
       SELECT name, year_published, cost_usd_per_month, average_monthly_users
       FROM ai_tools
     `);
     res.json(rows);
-  } catch (err) {
+  } 
+  catch (err) {
     res.status(500).json({ error: "Database error" });
   }
 });
