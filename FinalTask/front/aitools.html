@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>AI Tools</title>
+</head>
+<body>
+  <h2>AI Tools Catalog</h2>
+  <table border="1">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Year Published</th>
+        <th>Cost (USD/month)</th>
+        <th>Avg. Monthly Users</th>
+      </tr>
+    </thead>
+    <tbody id="tools-body"></tbody>
+  </table>
+
+  <script>
+    async function loadTools() {
+      const token = localStorage.getItem("token");
+      const res = await fetch("/ai-tools", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      if (!res.ok) {
+        alert("Unauthorized or error fetching tools.");
+        return;
+      }
+
+      const tools = await res.json();
+      const tbody = document.getElementById("tools-body");
+      tools.forEach(tool => {
+        const row = `<tr>
+          <td>${tool.name}</td>
+          <td>${tool.year_published}</td>
+          <td>${tool.cost_usd_per_month}</td>
+          <td>${tool.average_monthly_users}</td>
+        </tr>`;
+        tbody.innerHTML += row;
+      });
+    }
+
+    loadTools();
+  </script>
+</body>
+</html>
