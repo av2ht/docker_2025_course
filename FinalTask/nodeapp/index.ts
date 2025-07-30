@@ -1,10 +1,13 @@
 import express from "express";
 import jwt from "jsonwebtoken";
 import mysql from "mysql2";
+import bodyParser from "body-parser";
+import path from "path";
 
-const app = express();
 const PORT = 3000;
 const JWT_SECRET = "secret123";
+
+const app = express();
 
 const db = mysql.createPool({
   host: "mysql",
@@ -15,7 +18,6 @@ const db = mysql.createPool({
 
 function verifyToken(req: any, res: any, next: any) {
   const token = req.header("Authorization")?.split(" ")[1];
-
   if (!token) {
     return res.status(403).send("No token");
   }
@@ -28,9 +30,9 @@ function verifyToken(req: any, res: any, next: any) {
   });
 }
 
-app.use(express.json());
+app.use(bodyParser.json());
 
-app.use("/public", express.static("public"));
+app.use("/", express.static(path.join(__dirname, "public")));
 
 app.post("/login", (req, res) => {
   const { username, password } = req.body;
@@ -50,7 +52,7 @@ app.get("/ai-tools", verifyToken, (req, res) => {
     res.json(rows);
   } 
   catch (err) {
-    res.status(500).json({ error: "Database error" });
+    res.status(500).json({ error: "Db error" });
   }
 });
 
